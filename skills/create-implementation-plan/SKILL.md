@@ -3,7 +3,7 @@ name: create-implementation-plan
 description: Turn a refined requirements document into a structured implementation PLAN.md a fresh session can execute. Planning only — decides the "how", not the "what". Invoke manually only.
 license: MIT
 metadata:
-  version: "1.18"
+  version: "1.19"
 ---
 
 # Create Implementation Plan
@@ -57,9 +57,18 @@ design, not a separate phase that runs before planning starts.
    **Prior art models shape, not content.** Its settings fit its own runtime, tooling and purpose
    and may predate the current ones, so before a step reuses a file, check each setting against
    the new component's target and prescribe only what fits, citing the file for shape; "copy X
-   verbatim" is a decision settled line by line, never by the file's existence. A technical claim
-   a step rests on ("X needs exactly Y") is verified against a doc, a compile or a test, never
-   read off what the prior art happens to do.
+   verbatim" is a decision settled line by line, never by the file's existence.
+
+   **Run what the plan asserts.** A technical claim a step rests on ("X needs exactly Y"), a
+   snippet, and a verify step's expected result are each settled by a doc, a compile or a run,
+   never read off the code or the prior art. When the tooling runs here, dry-run snippets and
+   verify commands on a scratch copy, never the working tree, keeping what the tool reads around
+   its inputs (parent configs, workspace root, working directory) or the run proves nothing. A
+   claim that can't run here is traced through each call's implementation for the plan's own
+   inputs (types, missing data, empty results), never settled by a call's name or a prior-art
+   caller, then marked unverified, and the step that first exercises it fails loudly when it is
+   wrong. A verify step inspects what its own run produced (the tag the build actually writes, the
+   regenerated file), never a leftover.
 
    **Deletions tend to cascade.** When a step deletes code, look for what that code was the last
    user of (a module, helper, template, constant, package) by searching for each one's other users,
